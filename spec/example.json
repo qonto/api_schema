@@ -1,0 +1,50 @@
+{:swagger=>"2.0",
+ :info=>{:version=>"1.0", :title=>"API - App", :description=>"Qonto services API", :termsOfService=>"https://qonto.eu", :contact=>{:name=>"Qonto API Team"}},
+ :securityDefinitions=>{:authorization=>{:name=>:Authorization, :type=>:apiKey, :in=>:header}},
+ :host=>"docs.qonto.co",
+ :basePath=>"/api-app",
+ :consumes=>"application/json",
+ :produces=>"application/json",
+ :paths=>
+  {:"/attachments/{id}"=>
+    {:delete=>
+      {:summary=>"Delete attachment",
+       :description=>"Delete an attachment",
+       :operationId=>"delete_/attachments/{id}",
+       :tags=>"attachments",
+       :security=>[{:authorization=>[]}],
+       :parameters=>[{:name=>:id, :in=>:path, :required=>true, :type=>:string}],
+       :responses=>
+        {200=>{:schema=>{}},
+         401=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         403=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         404=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         422=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}}}}},
+   :"/attachments/{id}/download"=>
+    {:get=>
+      {:summary=>"Download attachment",
+       :description=>"Download an attachment",
+       :operationId=>"get_/attachments/{id}/download",
+       :tags=>"attachments",
+       :security=>[{:authorization=>[]}],
+       :parameters=>[{:name=>:id, :in=>:path, :required=>true, :type=>:string}],
+       :responses=>
+        {200=>{:schema=>{:$ref=>"#/definitions/file"}},
+         401=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         403=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         404=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         422=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}}}}},
+   :"/attachments"=>
+    {:post=>
+      {:summary=>"Creates attachment",
+       :description=>"Creates a new attachment",
+       :operationId=>"post_/attachments",
+       :tags=>"attachments",
+       :security=>[{:authorization=>[]}],
+       :parameters=>[{:name=>:create_attachment, :in=>:body, :required=>true, :schema=>{:$ref=>"#/definitions/create_attachment"}}],
+       :responses=>
+        {200=>{:schema=>{:$ref=>"#/definitions/attachment"}},
+         401=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         403=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         404=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}},
+         422=>{:description=>nil, :schema=>{:$ref=>"#/definitions/error_model"}}}}}}}
