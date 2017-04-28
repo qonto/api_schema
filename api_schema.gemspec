@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Dmitry Chopey"]
   spec.email         = ["dmitry.chopey@gmail.com"]
 
-  spec.summary       = %q{api_schema provides a framework and DSL for describing api
+  spec.summary       = %q{api_schema provides a framework and DSL for describing APIs
                           and generate swagger json.}
-  spec.description   = %q{api_schema provides a framework and DSL for describing api
+  spec.description   = %q{api_schema provides a framework and DSL for describing APIs
                           and generate swagger json using minimalist, schema.db-like syntax.}
   spec.homepage      = "https://github.com/qonto/api_schema."
   spec.license       = "MIT"
