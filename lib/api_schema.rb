@@ -8,7 +8,6 @@ require 'api_schema/patches/schema_node'
 require "api_schema/configuration"
 require "api_schema/api_version"
 require "api_schema/root_methods"
-require "api_schema/root_config"
 require "api_schema/field"
 require "api_schema/response"
 require "api_schema/serializer_definition"

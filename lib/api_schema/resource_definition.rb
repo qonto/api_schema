@@ -2,6 +2,8 @@ module ApiSchema
   class ResourceDefinition
     include ::Swagger::Blocks::ClassMethods
 
+    @@neighbors = {}
+
     def initialize(method, base_path, extra_path = nil)
       @base_path = base_path
       @extra_path = extra_path
@@ -71,6 +73,12 @@ module ApiSchema
       @full_path << "/#{extra_path}" if extra_path
     end
 
+    def build_neighbors
+      generate_full_path
+      @@neighbors[full_path] ||= []
+      @@neighbors[full_path] << self
+    end
+
     def build
       error_model = :error_model
       error_desc = {
@@ -80,31 +88,32 @@ module ApiSchema
         '422' => "Unprocessable Entity"
      }
       resource = self
-      resource.generate_full_path
 
       swagger_path resource.full_path do
-        operation(resource.method) do
-          key :summary, resource.summary
-          key :description, resource.description
-          key :operationId, "#{resource.method}_#{resource.full_path}"
-          key :tags, resource.base_path
-          security do
-            key :authorization, []
-          end
-          body_param(resource.body_param) if resource.with_body?
+        @@neighbors[resource.full_path].each do |r|
+          operation(r.method) do
+            key :summary, r.summary
+            key :description, r.description
+            key :operationId, "#{r.method}_#{r.full_path}"
+            key :tags, r.base_path
+            security do
+              key :authorization, []
+            end
+            body_param(r.body_param) if r.with_body?
 
-          resource.header_params.each do |p|
-            header_param(p.name, p.type)
-          end
-          resource.path_params.each do |p|
-            path_param(p.name, p.type)
-          end
-          resource.query_params.each do |p|
-            query_param(p.name, p.type)
-          end
+            r.header_params.each do |p|
+              header_param(p.name, p.type)
+            end
+            r.path_params.each do |p|
+              path_param(p.name, p.type)
+            end
+            r.query_params.each do |p|
+              query_param(p.name, p.type)
+            end
 
-          success_response(resource.resp.code, resource.resp.model, resource.resp.fields)
-          error_responses(error_model, error_desc, *resource.errors) if resource.with_errors?
+            success_response(r.resp.code, r.resp.model, r.resp.fields)
+            error_responses(error_model, error_desc, *r.errors) if r.with_errors?
+          end
         end
       end
     end
