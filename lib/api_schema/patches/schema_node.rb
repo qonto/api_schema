@@ -5,15 +5,15 @@ module Swagger
         def requires(fields)
           key :required, fields
         end
-        
+
         def schema_for(serializer)
-          key :title, serializer.name.to_s.humanize
+          key :title, serializer.id.to_s.humanize
           serializer.type == :array ? array_schema(serializer) : single_schema(serializer)
         end
 
         def single_schema(serializer)
           key :required, serializer.name
-          property serializer.title do
+          property serializer.name do
             key :type, :object
             requires serializer.required_fields
             serializer.fields.each do |f|
@@ -44,7 +44,7 @@ module Swagger
         end
 
         def property_schema_for(serializer)
-          property serializer.title do
+          property serializer.name do
             key :type, serializer.type
             key :description, serializer.description
             requires serializer.required_fields

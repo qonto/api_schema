@@ -3,14 +3,14 @@ module ApiSchema
 
     private
 
-    def serializer(name, structure: :object, title: nil, parent: nil)
-      serializer = SerializerDefinition.new(name, structure, title, parent)
+    def serializer(id, structure: :object, name: nil, parent: nil)
+      serializer = SerializerDefinition.new(id, structure, name, parent)
       yield serializer if block_given?
       api_version.serializers << serializer
     end
 
-    def array_serializer(name, title: nil, parent: nil)
-      serializer = SerializerDefinition.new(name, :array, title, parent)
+    def array_serializer(id, name: nil, parent: nil)
+      serializer = SerializerDefinition.new(id, :array, name, parent)
       yield serializer if block_given?
       api_version.serializers << serializer
     end

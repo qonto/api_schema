@@ -1,8 +1,5 @@
 require "spec_helper"
 
-SWAGGER_JSON_EXAMPLE = open(File.expand_path('../example.json', __FILE__)).read
-
-
 class BaseDocs
   include ApiSchema
 
@@ -51,6 +48,7 @@ class AttachmentSerializer < BaseDocs
     f.string    :subject_id
     f.string    :subject_type
     f.string    :created_at, required: true
+    f.referece  :file
   end
 
 end
@@ -78,7 +76,7 @@ class AttachmentsController < BaseDocs
     name 'Creates attachment'
     desc 'Creates a new attachment'
     response 200, :attachment
-    error! 401, 403, 404, 422
+    error! 401, 403, 422
   end
 
   delete do
@@ -89,7 +87,7 @@ class AttachmentsController < BaseDocs
     error! 401, 403, 404, 422
   end
 
-  request_body :create_attachment, title: 'attachment' do |f|
+  request_body :create_attachment, name: 'attachment' do |f|
     f.string :organization_id, required: true
     f.string :subject_id
     f.string :subject_type
@@ -128,6 +126,42 @@ describe ApiSchema do
         '404' => "Not found",
         '422' => "Unprocessable Entity"
       })
+    end
+  end
+
+  describe 'serializers' do
+    before do
+      @data = JSON.parse(BaseDocs.generate_json.to_json)
+    end
+
+    it 'has correct models' do
+       expect(@data["definitions"].keys).to match_array(["file", "error_model", "attachment", "create_attachment"])
+    end
+
+    it 'has correct references' do
+       expect(@data["definitions"]["attachment"]["properties"]["attachment"]["properties"].keys).to include("file")
+    end
+  end
+
+  describe 'controllers' do
+    before do
+      @data = JSON.parse(BaseDocs.generate_json.to_json)
+    end
+
+    it 'has correct routes' do
+       expect(@data["paths"].keys).to eq(["/attachments/{id}", "/attachments/{id}/download", "/attachments"])
+    end
+
+    it 'has correct methods' do
+       expect(@data["paths"].values.map(&:keys).flatten).to match_array(["get", "get", "post", "delete"])
+    end
+
+    it 'has correct response' do
+       expect(@data["paths"]['/attachments']["post"]['responses'].keys).to include("200")
+    end
+
+    it 'has correct errors' do
+       expect(@data["paths"]['/attachments']["post"]['responses'].keys).to include("401", "403", "422")
     end
   end
 end

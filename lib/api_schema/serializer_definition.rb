@@ -4,42 +4,42 @@ module ApiSchema
 
     @@serializers = {}
 
-    PriorReference = ::Struct.new(:name, :type, :desc)
+    PriorReference = ::Struct.new(:id, :type, :desc)
 
-    attr_reader :name, :fields, :references, :parent
-    attr_accessor :type, :title, :description
+    attr_reader :id, :fields, :references, :parent
+    attr_accessor :type, :name, :description
 
-    def initialize(name, type, title=nil, parent_name = nil)
-      @name = name
+    def initialize(id, type, name=nil, parent_id = nil)
+      @id = id
       @type = type
-      @title = title || name
-      @parent = @@serializers[parent_name]
+      @name = name || id
+      @parent = @@serializers[parent_id]
       @fields = parent&.fields || []
       @prior_references = parent&.prior_references || []
       @references = []
-      @@serializers[name] = self
+      @@serializers[id] = self
     end
 
     def required_fields
       fields.select { |f| f.required? }.map(&:name) + references.map(&:name)
     end
 
-    def reference(refernce_name, type: :object, desc: nil)
-      @prior_references << PriorReference.new(refernce_name, type, desc)
+    def reference(refernce_id, type: :object, desc: nil)
+      @prior_references << PriorReference.new(refernce_id, type, desc)
     end
 
     def build
       build_references
       sd = self
-      swagger_schema(name) { schema_for(sd) }
+      swagger_schema(id) { schema_for(sd) }
     end
 
     def build_references
       @prior_references.each do |pr|
-        reference = @@serializers[pr.name].clone
+        reference = @@serializers[pr.id].clone
         reference.type = pr.type
         reference.description = pr.desc
-        reference.title = reference.title.to_s.pluralize if type == :array
+        reference.name = reference.name.to_s.pluralize if reference.type == :array
         @references << reference
       end
     end

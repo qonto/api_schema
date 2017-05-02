@@ -7,7 +7,7 @@ module Swagger
         end
 
         def property_schema_for(serializer)
-          property serializer.title do
+          property serializer.name do
             key :type, serializer.type
             key :description, serializer.description
             requires serializer.required_fields
