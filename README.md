@@ -24,6 +24,7 @@ Or install it yourself as:
 ## Usage
 
 Just add `include ApiSchema` and configurations to your base class and inherit from it.
+To generate json use `BaseDocs.generate_json` method.
 
 #### BaseDocs
 
