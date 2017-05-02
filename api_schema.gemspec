@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{api_schema provides a framework and DSL for describing APIs
                           and generate swagger json.}
   spec.description   = %q{api_schema provides a framework and DSL for describing APIs
-                          and generate swagger json using minimalist, schema.db-like syntax.}
-  spec.homepage      = "https://github.com/qonto/api_schema."
+                          and generate swagger json using minimalistic, schema.db-like syntax.}
+  spec.homepage      = "https://github.com/qonto/api_schema"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
