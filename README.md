@@ -23,8 +23,9 @@ Or install it yourself as:
 
 ## Usage
 
-Just add `include ApiSchema` and configurations to your base class and inherit from it.
-To generate json use `BaseDocs.generate_json` method.
+Just add `include ApiSchema` and configurations to your base class and inherit from it. You also should define your default `:error_model`
+
+**To generate json use `BaseDocs.generate_json` method.**
 
 #### BaseDocs
 
@@ -51,6 +52,11 @@ module V1
         '404' => "Not found",
         '422' => "Unprocessable Entity"
       }
+    end
+
+    serializer :error_model do |f|
+      f.integer :code, required: true
+      f.string :message, required: true
     end
   end
 end
