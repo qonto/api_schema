@@ -2,7 +2,7 @@ module ApiSchema
   class SerializerDefinition
     include ::Swagger::Blocks::ClassMethods
 
-    @@serializers = {}
+    @serializers = {}
 
     PriorReference = ::Struct.new(:id, :type, :desc)
 
@@ -13,11 +13,15 @@ module ApiSchema
       @id = id
       @type = type
       @name = name || id
-      @parent = @@serializers[parent_id]
+      @parent = self.class.serializers[parent_id]
       @fields = parent&.fields || []
       @prior_references = parent&.prior_references || []
       @references = []
-      @@serializers[id] = self
+      self.class.serializers[id] = self
+    end
+
+    def self.serializers
+      @serializers
     end
 
     def required_fields
@@ -36,7 +40,7 @@ module ApiSchema
 
     def build_references
       @prior_references.each do |pr|
-        reference = @@serializers[pr.id].clone
+        reference = self.class.serializers[pr.id].clone
         reference.type = pr.type
         reference.description = pr.desc
         reference.name = reference.name.to_s.pluralize if reference.type == :array
