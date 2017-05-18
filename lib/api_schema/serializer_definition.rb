@@ -40,6 +40,7 @@ module ApiSchema
 
     def build_references
       @prior_references.each do |pr|
+        raise "Model #{pr.id} is not defined" unless self.class.serializers[pr.id]
         reference = self.class.serializers[pr.id].clone
         reference.type = pr.type
         reference.description = pr.desc
