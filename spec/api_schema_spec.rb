@@ -43,11 +43,11 @@ module First
 
     serializer :attachment do |f|
       f.string    :id, required: true
-      f.string    :download_url, required: true
+      f.string    :download_url, required: true, allowed_values: ['Slug1', 'Slug2']
       f.string    :slug, required: true, desc: "String representing the human id, composed by subject slug, model name, sequential id. (i.e 'milton-arps-zabel-3311-transaction-27-new-attachment-1')"
       f.string    :organization_id, required: true
       f.string    :subject_id
-      f.string    :subject_type
+      f.string    :subject_type, allowed_values: 'Company'
       f.string    :created_at, required: true
       f.referece  :file
     end
@@ -198,6 +198,11 @@ describe ApiSchema do
 
     it 'has correct references' do
       expect(@data["definitions"]["attachment"]["properties"]["attachment"]["properties"].keys).to include("file")
+    end
+
+    it 'has allowed values' do
+      expect(@data["definitions"]["attachment"]["properties"]["attachment"]["properties"]["download_url"]["enum"]).to eq(["Slug1", "Slug2"])
+      expect(@data["definitions"]["attachment"]["properties"]["attachment"]["properties"]["subject_type"]["enum"]).to eq(["Company"])
     end
   end
 

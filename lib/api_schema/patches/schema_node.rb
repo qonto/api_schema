@@ -21,6 +21,7 @@ module Swagger
                 key :type, f.type
                 key :format, f.format if f.format
                 key :description, f.description
+                key :enum, f.allowed_values unless f.allowed_values.empty?
               end
             end
             serializer.references.each do |r|
@@ -36,6 +37,7 @@ module Swagger
               key :type, f.type
               key :format, f.format if f.format
               key :description, f.description
+             key :enum, f.allowed_values unless f.allowed_values.empty?
             end
           end
           serializer.references.each do |r|
@@ -53,6 +55,7 @@ module Swagger
                 key :type, f.type
                 key :format, f.format if f.format
                 key :description, f.description
+                key :enum, f.allowed_values unless f.allowed_values.empty?
               end
             end
             serializer.references.each do |r|
