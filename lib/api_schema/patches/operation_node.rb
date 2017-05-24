@@ -15,11 +15,11 @@ module Swagger
           end
         end
 
-        def header_param(name, type)
+        def header_param(name, type, required)
           parameter do
             key :name, name
             key :in, :header
-            key :required, true
+            key :required, required
             key :type, type
           end
         end
@@ -35,20 +35,20 @@ module Swagger
           end
         end
 
-        def query_param(name, type)
+        def query_param(name, type, required)
           parameter do
             key :name, name
             key :in, :query
-            key :required, true
+            key :required, required
             key :type, type
           end
         end
 
-        def path_param(name, type)
+        def path_param(name, type, required)
           parameter do
             key :name, name
             key :in, :path
-            key :required, true
+            key :required, required
             key :type, type
           end
         end

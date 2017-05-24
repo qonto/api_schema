@@ -13,9 +13,9 @@ module ApiSchema
       @query_params = []
     end
 
-    HeaderParam = ::Struct.new(:name, :type)
-    PathParam = ::Struct.new(:name, :type)
-    QueryParam = ::Struct.new(:name, :type)
+    HeaderParam = ::Struct.new(:name, :type, :required)
+    PathParam = ::Struct.new(:name, :type, :required)
+    QueryParam = ::Struct.new(:name, :type, :required)
 
     attr_reader :method, :summary, :description, :header_params, :body_param,
     :path_params, :query_params, :resp,
@@ -33,20 +33,20 @@ module ApiSchema
       @description = desc
     end
 
-    def header(name, type)
-      @header_params << HeaderParam.new(name, type)
+    def header(name, type, required: true)
+      @header_params << HeaderParam.new(name, type, required)
     end
 
     def body(body_param)
       @body_param = body_param
     end
 
-    def path_param(name, type)
-      @path_params << PathParam.new(name, type)
+    def path_param(name, type, required: true)
+      @path_params << PathParam.new(name, type, required)
     end
 
-    def query_param(name, type)
-      @query_params << QueryParam.new(name, type)
+    def query_param(name, type, required: true)
+      @query_params << QueryParam.new(name, type, required)
     end
 
     def response(code, model_name = nil, &block)
@@ -106,13 +106,13 @@ module ApiSchema
             body_param(r.body_param) if r.with_body?
 
             r.header_params.each do |p|
-              header_param(p.name, p.type)
+              header_param(p.name, p.type, p.required)
             end
             r.path_params.each do |p|
-              path_param(p.name, p.type)
+              path_param(p.name, p.type, p.required)
             end
             r.query_params.each do |p|
-              query_param(p.name, p.type)
+              query_param(p.name, p.type, p.required)
             end
 
             success_response(r.resp.code, r.resp.model, r.resp.fields)
