@@ -1,4 +1,4 @@
-# Api Schema [![Build Status](https://travis-ci.org/qonto/api_schema.svg?branch=master)](https://travis-ci.org/qonto/api_schema)
+# Api Schema [![Build Status](https://travis-ci.org/qonto/api_schema.svg?branch=master)](https://travis-ci.org/qonto/api_schema) [![Gem Version](https://badge.fury.io/rb/api_schema.svg)](https://badge.fury.io/rb/api_schema)
 Provides a framework and DSL for describing APIs and generate swagger-json using minimalist, schema.db-like syntax.
 
 <p align="center">
