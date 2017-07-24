@@ -2,8 +2,6 @@ module ApiSchema
   class ResourceDefinition
     include ::Swagger::Blocks::ClassMethods
 
-    @neighbors = {}
-
     def initialize(method, base_path, extra_path = nil)
       @base_path = base_path
       @extra_path = extra_path
@@ -20,10 +18,6 @@ module ApiSchema
     attr_reader :method, :summary, :description, :header_params, :body_param,
     :path_params, :query_params, :resp,
     :errors, :base_path, :extra_path, :full_path
-
-    def self.neighbors
-      @neighbors
-    end
 
     def name(name)
       @summary = name
@@ -77,13 +71,13 @@ module ApiSchema
       @full_path << "/#{extra_path}" if extra_path
     end
 
-    def build_neighbors
+    def build_neighbors(neighbors)
       generate_full_path
-      self.class.neighbors[full_path] ||= []
-      self.class.neighbors[full_path] << self
+      neighbors[full_path] ||= []
+      neighbors[full_path] << self
     end
 
-    def build
+    def build(neighbors)
       error_model = :error_model
       error_desc = {
         '401' => "Unauthorized",
@@ -92,9 +86,8 @@ module ApiSchema
         '422' => "Unprocessable Entity"
      }
       resource = self
-      resource_class = self.class
       swagger_path resource.full_path do
-        resource_class.neighbors[resource.full_path].each do |r|
+        neighbors[resource.full_path].each do |r|
           operation(r.method) do
             key :summary, r.summary
             key :description, r.description
