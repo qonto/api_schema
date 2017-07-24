@@ -2,26 +2,21 @@ module ApiSchema
   class SerializerDefinition
     include ::Swagger::Blocks::ClassMethods
 
-    @serializers = {}
-
     PriorReference = ::Struct.new(:id, :type, :desc)
 
     attr_reader :id, :fields, :references, :parent
     attr_accessor :type, :name, :description
 
-    def initialize(id, type, name=nil, parent_id = nil)
+    def initialize(id, type, serializers, name=nil, parent_id = nil)
       @id = id
       @type = type
       @name = name || id
-      @parent = self.class.serializers[parent_id]
+      @parent = serializers[parent_id]
       @fields = parent&.fields || []
       @prior_references = parent&.prior_references || []
       @references = []
-      self.class.serializers[id] = self
-    end
 
-    def self.serializers
-      @serializers
+      serializers[id] = self
     end
 
     def required_fields
@@ -32,16 +27,16 @@ module ApiSchema
       @prior_references << PriorReference.new(refernce_id, type, desc)
     end
 
-    def build
-      build_references
+    def build(serializers)
+      build_references(serializers)
       sd = self
       swagger_schema(id) { schema_for(sd) }
     end
 
-    def build_references
+    def build_references(serializers)
       @prior_references.each do |pr|
-        raise "Model #{pr.id} is not defined" unless self.class.serializers[pr.id]
-        reference = self.class.serializers[pr.id].clone
+        raise "Model #{pr.id} is not defined" unless serializers[pr.id]
+        reference = serializers[pr.id].clone
         reference.type = pr.type
         reference.description = pr.desc
         reference.name = reference.name.to_s.pluralize if reference.type == :array
