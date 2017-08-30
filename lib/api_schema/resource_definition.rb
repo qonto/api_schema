@@ -67,7 +67,7 @@ module ApiSchema
     end
 
     def generate_full_path
-      @full_path = with_path_param? ? "/#{base_path}/{id}" : "/#{base_path}"
+      @full_path = with_path_param? ? "/#{base_path}/{path_params.first.name}" : "/#{base_path}"
       @full_path << "/#{extra_path}" if extra_path
     end
 
