@@ -29,7 +29,7 @@ module ApiSchema
     end
 
     def desc_file(desc_file)
-      @description = IO.read("#{api_version.configuration.descriptions_path}/#{desc_file}.md")
+      @description = IO.read("#{api_version.configuration.descriptions_path}/#{desc_file}.md", encoding: 'utf-8')
     end
 
     def header(name, type, required: true)
