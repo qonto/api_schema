@@ -7,10 +7,16 @@ module ApiSchema
     :consumes, :produces, :authorization,
     :error_model, :error_desc
 
+    attr_reader :descriptions_path
+
     def initialize
       @error_model = 'error_model'
       @consumes = 'application/json'
       @produces = 'application/json'
+    end
+
+    def descriptions_path=(descriptions_path)
+      @descriptions_path = "#{Dir.pwd}/#{descriptions_path}"
     end
 
     def build

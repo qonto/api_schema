@@ -2,10 +2,11 @@ module ApiSchema
   class ResourceDefinition
     include ::Swagger::Blocks::ClassMethods
 
-    def initialize(method, base_path, extra_path = nil)
+    def initialize(method, api_version, base_path, extra_path = nil)
       @base_path = base_path
       @extra_path = extra_path
       @method = method
+      @api_version = api_version
       @header_params = []
       @path_params = []
       @query_params = []
@@ -15,7 +16,7 @@ module ApiSchema
     PathParam = ::Struct.new(:name, :type, :required)
     QueryParam = ::Struct.new(:name, :type, :required)
 
-    attr_reader :method, :summary, :description, :header_params, :body_param,
+    attr_reader :method, :api_version, :summary, :description, :header_params, :body_param,
     :path_params, :query_params, :resp,
     :errors, :base_path, :extra_path, :full_path
 
@@ -25,6 +26,10 @@ module ApiSchema
 
     def desc(desc)
       @description = desc
+    end
+
+    def desc_file(desc_file)
+      @description = IO.read("#{api_version.configuration.descriptions_path}/#{desc_file}.md")
     end
 
     def header(name, type, required: true)
