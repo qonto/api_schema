@@ -10,6 +10,7 @@ module ApiSchema
       @header_params = []
       @path_params = []
       @query_params = []
+      @errors = []
     end
 
     HeaderParam = ::Struct.new(:name, :type, :required)
@@ -65,6 +66,11 @@ module ApiSchema
 
     def with_body?
       !!body_param
+    end
+
+    def body_defined?
+      return true if api_version.serializers.detect {|s| s.id == body_param }
+      raise "There is no '#{body_param}' body parameter defined for #{full_path} resource. Please define it with 'request_body' method"
     end
 
     def with_errors?
