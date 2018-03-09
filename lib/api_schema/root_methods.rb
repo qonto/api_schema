@@ -16,9 +16,9 @@ module ApiSchema
       @version_serializers = {}
     end
 
-    def import_serializers_from(name, version)
+    def import_serializers_from(name, api_version)
       @api_version.imported_versions << OpenStruct.new(name: name,
-                                                       version: version)
+                                                       api_version: api_version)
     end
 
     def api_version

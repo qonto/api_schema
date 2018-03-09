@@ -56,7 +56,7 @@ module ApiSchema
     end
 
     def imported_version(import)
-      "#{import.name.capitalize}::#{import.version.capitalize}::BaseDocs".constantize.api_version
+      "#{import.name.capitalize}::#{import.api_version.capitalize}::BaseDocs".constantize.api_version
     end
 
     def add_errors(key, object)
