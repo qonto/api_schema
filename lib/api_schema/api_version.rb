@@ -1,4 +1,3 @@
-require 'pry'
 module ApiSchema
   class ApiVersion
     attr_accessor :configuration, :resources, :serializers, :imported_versions, :errors
