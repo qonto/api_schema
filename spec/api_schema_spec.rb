@@ -98,107 +98,6 @@ module First
   end
 end
 
-module Second
-  class BaseDocs
-    include ApiSchema
-
-    configure do |config|
-      config.title = 'Users API'
-      config.description = 'API for users'
-      config.version = '1.0'
-      config.host = 'sample.com'
-      config.base_path = '/api'
-      config.terms_of_service = 'https://sample.com/terms'
-      config.contact_name = 'API Team'
-      config.consumes = 'application/json'
-      config.produces = 'application/json'
-      config.authorization = true
-      config.error_model = :error_model
-      config.error_desc = {
-        '401' => "Unauthorized",
-        '403' => "Forbidden",
-        '404' => "Not found",
-        '422' => "Unprocessable Entity"
-      }
-    end
-
-    serializer :file do |f|
-      f.string :file_name, required: true
-      f.string :file_size, required: true
-      f.string :file_content_type, required: true
-      f.string :file_url, required: true
-    end
-  end
-
-  class ErrorSerializer < BaseDocs
-    serializer :error_model do |f|
-      f.integer :code, required: true
-      f.string  :message, required: true
-    end
-  end
-end
-
-
-module Wrong
-  class BaseDocs
-    include ApiSchema
-
-    configure do |config|
-      config.title = 'Users API'
-      config.description = 'API for users'
-      config.version = '1.0'
-      config.host = 'sample.com'
-      config.base_path = '/api'
-      config.terms_of_service = 'https://sample.com/terms'
-      config.contact_name = 'API Team'
-      config.consumes = 'application/json'
-      config.produces = 'application/json'
-      config.authorization = true
-      config.error_model = :error_model
-      config.error_desc = {
-        '401' => "Unauthorized",
-        '403' => "Forbidden",
-        '404' => "Not found",
-        '422' => "Unprocessable Entity"
-      }
-    end
-
-    serializer :file do |f|
-      f.string :file_name, required: true
-      f.string :file_size, required: true
-      f.string :file_content_type, required: true
-      f.string :file_url, required: true
-    end
-  end
-
-  class ErrorSerializer < BaseDocs
-    serializer :error_model do |f|
-      f.integer :code, required: true
-      f.string  :message, required: true
-    end
-  end
-
-  class AttachmentsController < BaseDocs
-
-    get do
-      path_param :id, :string
-      name 'Get attachment'
-      desc 'Get an attachment'
-      response 200, :attachment
-      error! 401, 403, 404, 422
-    end
-
-    post do
-      body :create_attachment
-      name 'Creates attachment'
-      desc 'Creates a new attachment'
-      response 200, :attachment
-      error! 401, 403, 422
-    end
-  end
-end
-
-
 module First
   module V2
     class BaseDocs
@@ -261,6 +160,190 @@ module First
     end
   end
 end
+
+module Second
+  class BaseDocs
+    include ApiSchema
+
+    configure do |config|
+      config.title = 'Users API'
+      config.description = 'API for users'
+      config.version = '1.0'
+      config.host = 'sample.com'
+      config.base_path = '/api'
+      config.terms_of_service = 'https://sample.com/terms'
+      config.contact_name = 'API Team'
+      config.consumes = 'application/json'
+      config.produces = 'application/json'
+      config.authorization = true
+      config.error_model = :error_model
+      config.error_desc = {
+        '401' => "Unauthorized",
+        '403' => "Forbidden",
+        '404' => "Not found",
+        '422' => "Unprocessable Entity"
+      }
+    end
+
+    serializer :file do |f|
+      f.string :file_name, required: true
+      f.string :file_size, required: true
+      f.string :file_content_type, required: true
+      f.string :file_url, required: true
+    end
+  end
+
+  class ErrorSerializer < BaseDocs
+    serializer :error_model do |f|
+      f.integer :code, required: true
+      f.string  :message, required: true
+    end
+  end
+end
+
+module WrongResource
+  class BaseDocs
+    include ApiSchema
+
+    configure do |config|
+      config.title = 'Users API'
+      config.description = 'API for users'
+      config.version = '1.0'
+      config.host = 'sample.com'
+      config.base_path = '/api'
+      config.terms_of_service = 'https://sample.com/terms'
+      config.contact_name = 'API Team'
+      config.consumes = 'application/json'
+      config.produces = 'application/json'
+      config.authorization = true
+      config.error_model = :error_model
+      config.error_desc = {
+        '401' => "Unauthorized",
+        '403' => "Forbidden",
+        '404' => "Not found",
+        '422' => "Unprocessable Entity"
+      }
+    end
+
+    serializer :file do |f|
+      f.string :file_name, required: true
+      f.string :file_size, required: true
+      f.string :file_content_type, required: true
+      f.string :file_url, required: true
+    end
+  end
+
+  class ErrorSerializer < BaseDocs
+    serializer :error_model do |f|
+      f.integer :code, required: true
+      f.string  :message, required: true
+    end
+  end
+
+  class AttachmentsController < BaseDocs
+
+    get do
+      path_param :id, :string
+      name 'Get attachment'
+      desc 'Get an attachment'
+      response 200, :attachment
+      error! 401, 403, 404, 422
+    end
+
+    post do
+      body :create_attachment
+      name 'Creates attachment'
+      desc 'Creates a new attachment'
+      response 200, :attachment
+      error! 401, 403, 422
+    end
+  end
+end
+
+module WrongReference
+  class BaseDocs
+    include ApiSchema
+
+    configure do |config|
+      config.title = 'Users API'
+      config.description = 'API for users'
+      config.version = '1.0'
+      config.host = 'sample.com'
+      config.base_path = '/api'
+      config.terms_of_service = 'https://sample.com/terms'
+      config.contact_name = 'API Team'
+      config.consumes = 'application/json'
+      config.produces = 'application/json'
+      config.authorization = true
+      config.error_model = :error_model
+      config.error_desc = {
+        '401' => "Unauthorized",
+        '403' => "Forbidden",
+        '404' => "Not found",
+        '422' => "Unprocessable Entity"
+      }
+    end
+
+    serializer :file do |f|
+      f.string :file_name, required: true
+      f.string :file_size, required: true
+      f.string :file_content_type, required: true
+      f.string :file_url, required: true
+      f.reference :attachment, type: :array
+    end
+  end
+
+  class ErrorSerializer < BaseDocs
+    serializer :error_model do |f|
+      f.integer :code, required: true
+      f.string  :message, required: true
+    end
+  end
+end
+
+module ImportReference
+  class BaseDocs
+    include ApiSchema
+
+    configure do |config|
+      config.title = 'Users API'
+      config.description = 'API for users'
+      config.version = '1.0'
+      config.host = 'sample.com'
+      config.base_path = '/api'
+      config.terms_of_service = 'https://sample.com/terms'
+      config.contact_name = 'API Team'
+      config.consumes = 'application/json'
+      config.produces = 'application/json'
+      config.authorization = true
+      config.error_model = :error_model
+      config.error_desc = {
+        '401' => "Unauthorized",
+        '403' => "Forbidden",
+        '404' => "Not found",
+        '422' => "Unprocessable Entity"
+      }
+    end
+
+    import_serializers_from :first, :v1
+
+    serializer :file do |f|
+      f.string :file_name, required: true
+      f.string :file_size, required: true
+      f.string :file_content_type, required: true
+      f.string :file_url, required: true
+      f.reference :attachment, type: :array
+    end
+  end
+
+  class ErrorSerializer < BaseDocs
+    serializer :error_model do |f|
+      f.integer :code, required: true
+      f.string  :message, required: true
+    end
+  end
+end
+
 
 describe ApiSchema do
   it "has a version number" do
@@ -352,15 +435,15 @@ describe ApiSchema do
     end
   end
 
-  context 'with errors' do
+  context 'with resource errors' do
     it 'throws exception' do
       expect do
-        Wrong::BaseDocs.generate_json
+        WrongResource::BaseDocs.generate_json
       end.to raise_error(UndefinedSerializersError, /attachment_extended|attachment|create_attachment/)
     end
   end
 
-  context 'with imports' do
+  context 'with imports for resource' do
     it 'does not throw exception' do
       expect do
         First::V2::BaseDocs.generate_json
@@ -405,6 +488,36 @@ describe ApiSchema do
 
       it 'has correct errors' do
         expect(@data["paths"]['/attachments']["post"]['responses'].keys).to include("401", "403", "422")
+      end
+    end
+  end
+
+  context 'with reference errors' do
+    it 'throws exception' do
+      expect do
+        WrongReference::BaseDocs.generate_json
+      end.to raise_error(UndefinedSerializersError, /attachment/)
+    end
+  end
+
+  context 'with imports for references' do
+    it 'does not throw exception' do
+      expect do
+        ImportReference::BaseDocs.generate_json
+      end.not_to raise_error(UndefinedSerializersError)
+    end
+
+    describe 'serializers' do
+      before do
+        @data = JSON.parse(ImportReference::BaseDocs.generate_json.to_json)
+      end
+
+      it 'has correct models' do
+        expect(@data["definitions"].keys).to match_array(["file", "error_model", "attachment"])
+      end
+
+      it 'has correct references' do
+        expect(@data["definitions"]["file"]["properties"]["file"]["properties"].keys).to include("attachments")
       end
     end
   end

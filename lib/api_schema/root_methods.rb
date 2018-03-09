@@ -6,8 +6,6 @@ module ApiSchema
       subclass.instance_variable_set(instance_var, instance_variable_get(instance_var))
       instance_var_neighbors = "@version_resources"
       subclass.instance_variable_set(instance_var_neighbors, instance_variable_get(instance_var_neighbors))
-      instance_var_neighbors = "@version_serializers"
-      subclass.instance_variable_set(instance_var_neighbors, instance_variable_get(instance_var_neighbors))
     end
 
     def configure
@@ -37,11 +35,8 @@ module ApiSchema
 
     def generate_json
       @api_version.configuration.build
-      @api_version.serializers.each { |s| s.build_references(version_serializers) }
-
       @api_version.check_consistency
-
-      @api_version.serializers.each { |s| s.build(version_serializers) }
+      @api_version.serializers.each { |s| s.build }
       @api_version.resources.each { |r| r.build(version_resources) }
 
       nodes = [@api_version.configuration] +  @api_version.serializers + @api_version.resources

@@ -4,19 +4,18 @@ module ApiSchema
 
     PriorReference = ::Struct.new(:id, :type, :desc)
 
-    attr_reader :id, :fields, :references, :parent
+    attr_reader :id, :fields, :references, :parent, :api_version
     attr_accessor :type, :name, :description, :prior_references
 
-    def initialize(id, type, serializers, name=nil, parent_id = nil)
+    def initialize(id, type, api_version, name=nil, parent_id = nil)
       @id = id
       @type = type
       @name = name || id
-      @parent = serializers[parent_id]
+      @api_version = api_version
+      @parent = api_version.serializers.detect { |s| s.id == parent_id } if parent_id
       @fields = parent&.fields || []
       @prior_references = parent&.prior_references || []
       @references = []
-
-      serializers[id] = self
     end
 
     def required_fields
@@ -27,16 +26,15 @@ module ApiSchema
       @prior_references << PriorReference.new(refernce_id, type, desc)
     end
 
-    def build(serializers)
-      build_references(serializers)
+    def build
+      build_references
       sd = self
       swagger_schema(id) { schema_for(sd) }
     end
 
-    def build_references(serializers)
+    def build_references
       @prior_references.each do |pr|
-        raise "Model #{pr.id} is not defined" unless serializers[pr.id]
-        reference = serializers[pr.id].clone
+        reference = api_version.serializers.detect { |s| s.id == pr.id }
         reference.type = pr.type
         reference.description = pr.desc
         reference.name = reference.name.to_s.pluralize if reference.type == :array
