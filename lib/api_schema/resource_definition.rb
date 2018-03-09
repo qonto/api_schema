@@ -68,16 +68,6 @@ module ApiSchema
       !!body_param
     end
 
-    def body_defined?
-      return true if api_version.serializers.detect {|s| s.id == body_param }
-      raise "There is no '#{body_param}' body parameter defined for #{full_path} resource. Please define it with 'request_body' method"
-    end
-
-    def response_defined?
-      return true if resp.model.nil? || api_version.serializers.detect {|s| s.id == resp.model }
-      raise "There is no '#{resp.model}' response defined for ''#{summary} resource'. Please define it with 'serializer' method"
-    end
-
     def with_errors?
       !errors.empty?
     end
@@ -112,7 +102,7 @@ module ApiSchema
             security do
               key :authorization, []
             end
-            body_param(r.body_param) if r.with_body? && r.body_defined?
+            body_param(r.body_param) if r.with_body?
 
             r.header_params.each do |p|
               header_param(p.name, p.type, p.required)
@@ -124,7 +114,7 @@ module ApiSchema
               query_param(p.name, p.type, p.required)
             end
 
-            success_response(r.resp.code, r.resp.model, r.resp.fields) if r.response_defined?
+            success_response(r.resp.code, r.resp.model, r.resp.fields)
             error_responses(error_model, error_desc, *r.errors) if r.with_errors?
           end
         end

@@ -14,6 +14,7 @@ require "api_schema/serializer_definition"
 require "api_schema/serializer_methods"
 require "api_schema/resource_definition"
 require "api_schema/resource_methods"
+require "api_schema/exceptions/undefined_serializers_error.rb"
 require "api_schema/version"
 
 module ApiSchema
