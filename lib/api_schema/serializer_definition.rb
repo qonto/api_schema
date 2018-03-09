@@ -5,7 +5,7 @@ module ApiSchema
     PriorReference = ::Struct.new(:id, :type, :desc)
 
     attr_reader :id, :fields, :references, :parent
-    attr_accessor :type, :name, :description
+    attr_accessor :type, :name, :description, :prior_references
 
     def initialize(id, type, serializers, name=nil, parent_id = nil)
       @id = id

@@ -18,6 +18,11 @@ module ApiSchema
       @version_serializers = {}
     end
 
+    def import_serializers_from(name, version)
+      @api_version.imported_versions << OpenStruct.new(name: name,
+                                                       version: version)
+    end
+
     def api_version
       @api_version
     end
@@ -32,6 +37,10 @@ module ApiSchema
 
     def generate_json
       @api_version.configuration.build
+      @api_version.serializers.each { |s| s.build_references(version_serializers) }
+
+      @api_version.check_consistency
+
       @api_version.serializers.each { |s| s.build(version_serializers) }
       @api_version.resources.each { |r| r.build(version_resources) }
 
