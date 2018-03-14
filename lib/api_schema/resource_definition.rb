@@ -17,9 +17,11 @@ module ApiSchema
     PathParam = ::Struct.new(:name, :type, :required)
     QueryParam = ::Struct.new(:name, :type, :required)
 
-    attr_reader :method, :api_version, :summary, :description, :header_params, :body_param,
-    :path_params, :query_params, :resp,
-    :errors, :base_path, :extra_path, :full_path
+    attr_accessor :desc_file_path
+
+    attr_reader :method, :api_version, :summary, :description, :header_params,
+                :body_param, :path_params, :query_params, :resp, :errors,
+                :base_path, :extra_path, :full_path, :desc_file_name
 
     def name(name)
       @summary = name
@@ -29,8 +31,8 @@ module ApiSchema
       @description = desc
     end
 
-    def desc_file(desc_file)
-      @description = IO.read("#{api_version.configuration.descriptions_path}/#{desc_file}.md", encoding: 'utf-8')
+    def desc_file(desc_file_name)
+      @desc_file_name =  desc_file_name
     end
 
     def header(name, type, required: true)
@@ -77,6 +79,10 @@ module ApiSchema
       @full_path << "/#{extra_path}" if extra_path
     end
 
+    def build_description
+      @description = IO.read(desc_file_path, encoding: 'utf-8')
+    end
+
     def build_neighbors(neighbors)
       generate_full_path
       neighbors[full_path] ||= []
@@ -91,6 +97,8 @@ module ApiSchema
         '404' => "Not found",
         '422' => "Unprocessable Entity"
      }
+
+      build_description if desc_file_name
       resource = self
       swagger_path resource.full_path do
         neighbors[resource.full_path].each do |r|
