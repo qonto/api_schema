@@ -3,6 +3,10 @@ module ApiSchema
 
     private
 
+    def base_path(base_path)
+      @base_path = base_path
+    end
+
     def get(base_path = default_path, extra_path: nil, &block)
       resource = ResourceDefinition.new(:get, api_version, base_path, extra_path)
       resource.instance_eval(&block)
@@ -39,7 +43,7 @@ module ApiSchema
     end
 
     def default_path
-      self.to_s.split("::").last.gsub("Controller", "").split(/(?=[A-Z])/).map(&:downcase).join('_')
+     @base_path || self.to_s.split("::").last.gsub("Controller", "").split(/(?=[A-Z])/).map(&:downcase).join('_')
     end
   end
 end
