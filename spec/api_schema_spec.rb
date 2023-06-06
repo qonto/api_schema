@@ -447,7 +447,7 @@ describe ApiSchema do
     it 'does not throw exception' do
       expect do
         First::V2::BaseDocs.generate_json
-      end.not_to raise_error(UndefinedSerializersError)
+      end.not_to raise_error
     end
 
     describe 'serializers' do
@@ -504,7 +504,7 @@ describe ApiSchema do
     it 'does not throw exception' do
       expect do
         ImportReference::BaseDocs.generate_json
-      end.not_to raise_error(UndefinedSerializersError)
+      end.not_to raise_error
     end
 
     describe 'serializers' do

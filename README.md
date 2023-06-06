@@ -1,4 +1,7 @@
-# Api Schema [![Build Status](https://travis-ci.org/qonto/api_schema.svg?branch=master)](https://travis-ci.org/qonto/api_schema) [![Gem Version](https://badge.fury.io/rb/api_schema.svg)](https://badge.fury.io/rb/api_schema)
+![Gem Version](https://badge.fury.io/rb/api_schema.svg) ![CI Status](https://github.com/qonto/api_schema/actions/workflows/tests.yml/badge.svg)
+
+# Api Schema
+
 Provides a framework and DSL for describing APIs and generate swagger-json using minimalist, schema.db-like syntax.
 
 <p align="center">
@@ -292,3 +295,7 @@ end
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+## Releasing
+
+To publish a new version to rubygems, update the version in `lib/api_schema/version.rb`, and merge.
